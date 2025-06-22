@@ -1,0 +1,56 @@
+
+services:
+  web:
+    build: ./app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./logs:/logs
+    depends_on:
+      - db
+    networks:
+      - cybernet
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: t2
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - cybernet
+
+  snort:
+    build: ./snort
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: snort -i eth0 -A console -k none -l /var/log/snort -c /etc/snort/snort.conf
+    volumes:
+      - ./snort/log:/var/log/snort
+    networks:
+      - cybernet
+
+  monitoramento:
+    build: ./monitoramento
+    command: python3 watch.py
+    depends_on:
+      - web
+      - snort
+    volumes:
+      - ./app/app.log:/app/app.log
+      - ./snort/log:/var/log/snort
+      - ./monitoramento/logs:/monitoramento
+    networks:
+      - cybernet
+
+networks:
+  cybernet:
+    driver: bridge
+
+volumes:
+  mysql_data:

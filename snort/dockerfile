@@ -1,0 +1,11 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -y snort curl iputils-ping net-tools
+
+RUN mkdir -p /etc/snort/rules /var/log/snort
+
+COPY snort.conf /etc/snort/snort.conf
+COPY local.rules /etc/snort/rules/local.rules
+
+CMD ["snort", "-i", "eth0", "-c", "/etc/snort/snort.conf", "-A", "console", "-k", "none", "-l", "/var/log/snort"]
