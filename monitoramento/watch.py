@@ -54,7 +54,7 @@ def check_logs_activity():
             if seconds_since_mod < 10:
                 logger.info(f"Log de {name} está ativo (modificado há {int(seconds_since_mod)}s)")
             else:
-                logger.warning(f"Log de {name} pode estar inativo (última modificação há {int(seconds_since_mod)}s)")
+                logger.warning(f"Log de {name} inativo (última modificação há {int(seconds_since_mod)}s)")
         except FileNotFoundError:
             logger.error(f"Arquivo de log de {name} não encontrado: {path}")
 

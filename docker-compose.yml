@@ -29,7 +29,7 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    command: snort -i eth0 -A console -k none -l /var/log/snort -c /etc/snort/snort.conf
+    command: snort -i eth0 -A full -k none -l /var/log/snort -c /etc/snort/snort.conf
     volumes:
       - ./snort/log:/var/log/snort
     networks:
