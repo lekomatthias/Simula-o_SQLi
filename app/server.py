@@ -35,7 +35,9 @@ def submit():
             host="db", user="root", password="root", database="t2"
         )
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (dado) VALUES (%s)", (dado,))
+        # parte vulnerável a SQL Injection
+        query = f"INSERT INTO users (dado) VALUES ('{dado}')"
+        cursor.execute(query)
         conn.commit()
         cursor.close()
         conn.close()
