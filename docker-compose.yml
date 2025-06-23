@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./logs:/logs
+      - ./app/log:/app/log
     depends_on:
       - db
     networks:
@@ -43,7 +43,7 @@ services:
       - web
       - snort
     volumes:
-      - ./app/app.log:/app/app.log
+      - ./app/log:/app/log
       - ./snort/log:/var/log/snort
       - ./monitoramento/logs:/monitoramento
     networks:

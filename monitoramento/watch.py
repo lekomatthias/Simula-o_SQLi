@@ -42,7 +42,7 @@ def check_processes():
 
 def check_logs_activity():
     paths = {
-        'Web (Flask)': '/app/app.log',
+        'Web (Flask)': '/app/log',
         'Snort': '/var/log/snort/alert'
     }
 
