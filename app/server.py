@@ -14,10 +14,12 @@ handler.setLevel(logging.ERROR)
 formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
 handler.setFormatter(formatter)
 
-if not app.logger.hasHandlers():
-    app.logger.addHandler(handler)
+for h in list(app.logger.handlers):
+    app.logger.removeHandler(h)
 
+app.logger.addHandler(handler)
 app.logger.setLevel(logging.ERROR)
+
 
 @app.route('/')
 def index():

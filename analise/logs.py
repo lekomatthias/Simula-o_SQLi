@@ -2,7 +2,7 @@ import time
 import re
 
 SNORT_LOG = '/var/log/snort/alert'
-APP_LOG = '/app/app.log'
+APP_LOG = '/app/log/server.log'
 
 def tail(f):
     f.seek(0, 2)

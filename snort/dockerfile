@@ -3,6 +3,8 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y snort curl iputils-ping net-tools
 
+RUN chown -R root:root /var/log/snort && chmod -R 777 /var/log/snort
+
 RUN mkdir -p /etc/snort/rules /var/log/snort
 
 COPY snort.conf /etc/snort/snort.conf
