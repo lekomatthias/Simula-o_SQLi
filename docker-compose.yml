@@ -30,11 +30,11 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    command: snort -i eth0 -A full -k none -l /var/log/snort -c /etc/snort/snort.conf
+    # acesso a todas as portas do pc, mesmo fora do container
+    network_mode: "host"
     volumes:
       - ./snort/log:/var/log/snort
-    networks:
-      - cybernet
+    command: snort -i eth0 -A full -k none -l /var/log/snort -c /etc/snort/snort.conf
 
   monitoramento:
     build: ./monitoramento

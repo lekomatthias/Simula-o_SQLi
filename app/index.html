@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head><title>Ambiente de testes</title></head>
+<head>
+  <title>Site Vulnerável</title>
+</head>
 <body>
-  <h1>Entrada de Dados</h1>
+  <h1>Entrada de dados</h1>
   <form id="dataForm">
-    <input type="text" id="dado" placeholder="dado" required />
+    <input type="text" id="dado" placeholder="test'); --" required />
     <button type="submit">Enviar</button>
   </form>
+
+  <h2>Banco de dados</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>dado</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody">
+      <!-- Dados serão carregados aqui via JS -->
+    </tbody>
+  </table>
+
   <script src="script.js"></script>
 </body>
 </html>
