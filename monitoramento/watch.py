@@ -42,13 +42,17 @@ def check_processes():
 
 def check_logs_activity():
     paths = {
-        'Web (Flask)': '/app/log',
-        'Snort': '/var/log/snort/alert'
+        'Web Error': '/app/log/server.log',
+        'Web Access': '/app/log/access.log',
+        'Snort Alerts': '/var/log/snort/alert',
+        'MySQL Queries': '/var/lib/mysql/query.log',
+        'Network Capture': '/captures/traffic.pcap',
     }
 
     for name, path in paths.items():
         try:
-            last_mod = os.path.getmtime(path)
+            stats = os.stat(path)
+            last_mod = stats.st_mtime
             seconds_since_mod = time.time() - last_mod
 
             if seconds_since_mod < 10:

@@ -3,8 +3,6 @@ services:
   web:
     build: ./app
     command: python server.py
-    ports:
-      - "5000:5000"
     volumes:
       - ./app/log:/app/log
     depends_on:
@@ -17,11 +15,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: t2
+    command: --general-log=1 --general-log-file=/var/lib/mysql/query.log
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - cybernet
 
@@ -36,6 +33,16 @@ services:
       - ./snort/log:/var/log/snort
     command: snort -i eth0 -A full -k none -l /var/log/snort -c /etc/snort/snort.conf
 
+  sniffer:
+    build: ./sniffer
+    command: tcpdump -i eth0 -w /captures/traffic.pcap
+    volumes:
+      - captures_data:/captures
+    networks:
+      - cybernet
+    depends_on:
+      - web
+
   monitoramento:
     build: ./monitoramento
     command: python3 watch.py
@@ -43,11 +50,24 @@ services:
       - web
       - snort
     volumes:
-      - ./app/log:/app/log
-      - ./snort/log:/var/log/snort
-      - ./monitoramento/logs:/monitoramento
+      - ./app/log:/app/log                   # Logs da App
+      - ./snort/log:/var/log/snort           # Logs do Snort
+      - mysql_data:/var/lib/mysql            # Volume do DB
+      - captures_data:/captures              # Volume do Sniffer
+      - ./monitoramento/logs:/monitoramento  # Logs do próprio monitor
     networks:
       - cybernet
+
+  firewall:
+    image: nginx:1.25-alpine
+    ports:
+      - "5000:80"
+    volumes:
+      - ./firewall/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - cybernet
+    depends_on:
+      - web
 
 networks:
   cybernet:
@@ -55,3 +75,4 @@ networks:
 
 volumes:
   mysql_data:
+  captures_data: 

@@ -17,6 +17,12 @@ app.logger.handlers.clear()
 app.logger.addHandler(handler)
 app.logger.setLevel(logging.ERROR)
 
+ACCESS_LOG_FILE = os.path.join(LOG_DIR, 'access.log')
+# Configura o logger de acesso
+access_logger = logging.getLogger('werkzeug')
+access_handler = logging.FileHandler(ACCESS_LOG_FILE)
+access_logger.addHandler(access_handler)
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'index.html')
@@ -37,7 +43,7 @@ def submit():
         cursor = conn.cursor()
         # Vulnerabilidade proposital de SQLi
         query = f"INSERT INTO data_db (dado) VALUES ('{dado}')"
-        cursor.execute(query)
+        cursor.execute(query, multi=True)
         conn.commit()
         cursor.close()
         conn.close()
