@@ -69,6 +69,14 @@ services:
     depends_on:
       - web
 
+  sqli_tester:
+    build: ./test
+    networks:
+      - cybernet
+    depends_on:
+      - web
+      - firewall
+
 networks:
   cybernet:
     driver: bridge

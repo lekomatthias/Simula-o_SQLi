@@ -38,16 +38,25 @@ def submit():
 
     try:
         conn = mysql.connector.connect(
-            host="db", user="root", password="root", database="t2"
+            host="db", 
+            user="root", 
+            password="root", 
+            database="t2"
         )
         cursor = conn.cursor()
-        # Vulnerabilidade proposital de SQLi
-        query = f"INSERT INTO data_db (dado) VALUES ('{dado}')"
-        cursor.execute(query, multi=True)
+        full_query = f"INSERT INTO data_db (dado) VALUES ('{dado}')"
+        commands = full_query.split(';')
+        for command in commands:
+            # CORREÇÃO: Remove espaços em branco e verifica se não é um comentário
+            stripped_command = command.strip()
+            if stripped_command and not stripped_command.startswith('--'):
+                cursor.execute(stripped_command)
+
         conn.commit()
         cursor.close()
         conn.close()
-        return {'status': 'ok', 'executed_query': query}
+        
+        return {'status': 'ok', 'executed_query': full_query}
 
     except mysql.connector.Error as err:
         app.logger.error(f"Database error: {err}", exc_info=True)
