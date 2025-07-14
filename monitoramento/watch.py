@@ -31,7 +31,6 @@ def check_open_ports():
     logger.info(f"Portas abertas (escutando): {sorted(ports)}")
 
 def check_processes():
-    # Exemplo simples: checar se processos importantes estão rodando
     procs = [p.name().lower() for p in psutil.process_iter()]
     important = ['python']
     for imp in important:
