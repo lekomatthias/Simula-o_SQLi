@@ -71,7 +71,7 @@ class SystemMonitor:
         """Verifica se processos importantes estão em execução."""
         try:
             procs = [p.name().lower() for p in psutil.process_iter(['name'])]
-            important = ['python', 'nginx', 'mysql']
+            important = ['python']
             for imp in important:
                 if any(imp in p for p in procs):
                     self.logger.info(f"Processo '{imp}' está rodando.")
